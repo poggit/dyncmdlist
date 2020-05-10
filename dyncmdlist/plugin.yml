@@ -1,0 +1,7 @@
+name: dyncmdlist
+author: Poggit
+authors:
+  - SOFe
+main: Poggit\Plugins\DynCmdList\Main
+version: 0.1.0
+api: 3.0.0
