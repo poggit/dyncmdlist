@@ -31,27 +31,30 @@ final class Main extends PluginBase {
 
 		$commands = $this->getServer()->getCommandMap()->getCommands();
 
-		$found = [];
+		$found = new \SplObjectStorage;
 		foreach($commands as $command) {
 			if($command instanceof PluginIdentifiableCommand) {
 				$cmdPlugin = $command->getPlugin();
 				if($plugin === $cmdPlugin) {
-					$found[] = $command;
+					$found->attach($command);
 				}
 			}
 		}
 
+		$commands = [];
+		foreach($found as $command) {
+			$commands[] = [
+				"name" => $command->getName(),
+				"description" => $command->getDescription(),
+				"usage" => $command->getUsage(),
+				"aliases" => $command->getAliases(),
+				"class" => get_class($command),
+			];
+		}
+
 		return [
 			"status" => true,
-			"commands" => array_map(static function($cmd) {
-				return [
-					"name" => $cmd->getName(),
-					"description" => $cmd->getDescription(),
-					"usage" => $cmd->getUsage(),
-					"aliases" => $cmd->getAliases(),
-					"class" => get_class($cmd),
-				];
-			}, $found),
+			"commands" => $commands,
 		];
 	}
 }

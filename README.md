@@ -3,7 +3,7 @@ A docker image that analyzes the commands registered by a plugin under default c
 
 ## How to use
 ```
-docker run --rm -v ${LOCAL_PHAR_PATH}:/input/plugin.phar pmmp/dyncmdlist ${PluginName}
+docker run --rm -v ${LOCAL_PHAR_PATH}:/input/plugin.phar pmmp/dyncmdlist ./wrapper.sh ${PluginName}
 ```
 
 The command list is returned via stdout in JSON format.
