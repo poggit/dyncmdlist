@@ -25,7 +25,13 @@ mkdir ./plugins ./data
 cp /input/*.phar ./plugins/
 cp ./dyncmdlist.phar ./plugins/
 
-php PocketMine-MP.phar --no-wizard --disable-ansi --data=./data --plugins=./plugins >/dev/null
+if [[ $SHOW_STDOUT ]]; then
+	OUTPUT_FILE=/dev/stdout
+else
+	OUTPUT_FILE=/dev/null
+fi
+
+echo help | php PocketMine-MP.phar --no-wizard --disable-ansi --data=./data --plugins=./plugins >$OUTPUT_FILE
 EXIT_CODE="$?"
 
 if [ $EXIT_CODE -ne 0 ]; then

@@ -32,12 +32,15 @@ final class Main extends PluginBase {
 		$commands = $this->getServer()->getCommandMap()->getCommands();
 
 		$found = new \SplObjectStorage;
+		$bad = new \SplObjectStorage;
 		foreach($commands as $command) {
 			if($command instanceof PluginIdentifiableCommand) {
 				$cmdPlugin = $command->getPlugin();
 				if($plugin === $cmdPlugin) {
 					$found->attach($command);
 				}
+			} elseif(\strpos(\get_class($command), "pocketmine\\command\\defaults\\") !== 0) {
+				$bad->attach($command);
 			}
 		}
 
@@ -48,13 +51,25 @@ final class Main extends PluginBase {
 				"description" => $command->getDescription(),
 				"usage" => $command->getUsage(),
 				"aliases" => $command->getAliases(),
-				"class" => get_class($command),
+				"class" => \get_class($command),
+			];
+		}
+
+		$orphans = [];
+		foreach($bad as $command) {
+			$orphans[] = [
+				"name" => $command->getName(),
+				"description" => $command->getDescription(),
+				"usage" => $command->getUsage(),
+				"aliases" => $command->getAliases(),
+				"class" => \get_class($command),
 			];
 		}
 
 		return [
 			"status" => true,
 			"commands" => $commands,
+			"orphans" => $orphans,
 		];
 	}
 }
