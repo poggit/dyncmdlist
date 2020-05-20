@@ -28,19 +28,21 @@ cp ./dyncmdlist.phar ./plugins/
 if [[ $SHOW_STDOUT ]]; then
 	OUTPUT_FILE=/dev/stdout
 else
-	OUTPUT_FILE=/dev/null
+	OUTPUT_FILE=console.log
 fi
 
-echo help | php PocketMine-MP.phar --no-wizard --disable-ansi --data=./data --plugins=./plugins >$OUTPUT_FILE
+php PocketMine-MP.phar --no-wizard --disable-ansi --data=./data --plugins=./plugins >$OUTPUT_FILE
 EXIT_CODE="$?"
 
 if [ $EXIT_CODE -ne 0 ]; then
 	echo "PocketMine exited with $EXIT_CODE"
+	cat console.log
 	exit 1
 fi
 
 if [ ! -f ./dyncmdlist-output.json ]; then
 	echo "dyncmdlist-output.json was not created"
+	cat console.log
 	exit 1
 fi
 
